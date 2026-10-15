@@ -495,6 +495,29 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+  <!-- REGISTRATION MODAL -->
+<div id="regModal" class="nk-modal hidden">
+  <div class="nk-modal-card">
+    <h3>Welcome to Naija Know 🇳🇬</h3>
+    <p>Register once to save your scores, join live 1v1 challenges, and enter weekly prize leaderboards.</p>
+    <form id="regForm" onsubmit="handleRegistrationSubmit(event)">
+      <div class="form-group">
+        <label for="regName">Full Name</label>
+        <input type="text" id="regName" required placeholder="e.g. Tunde Adeyemi" />
+      </div>
+      <div class="form-group">
+        <label for="regEmail">Email Address</label>
+        <input type="email" id="regEmail" required placeholder="you@example.com" />
+      </div>
+      <div class="form-group">
+        <label for="regPhone">WhatsApp / Phone Number</label>
+        <input type="tel" id="regPhone" required placeholder="08012345678" />
+      </div>
+      <button type="submit" class="primary" style="margin-top:12px; width:100%;">Save & Continue</button>
+      <button type="button" class="text-btn" onclick="document.getElementById('regModal').classList.add('hidden')" style="margin-top:8px; width:100%; font-size:13px; color:#666; background:none; border:none; cursor:pointer;">Skip for now</button>
+    </form>
+  </div>
+</div>
   <div class="nk-app">
     <div id="challengeBanner" class="nk-banner" hidden>
       <span id="challengeBannerText">🏆 Friend Challenge Alert!</span>
@@ -582,6 +605,10 @@
       </div>
 
       <div class="actions">
+        <button id="inviteFriendBtn" type="button" style="background:#25D366; color:#fff; font-weight:700; width:100%; margin-bottom:10px; display:none;" onclick="triggerWhatsAppChallenge()">
+  📲 Challenge a Friend via WhatsApp
+</button>
+<button id="start" class="primary" type="button">Start game</button>
         <button id="start" class="primary" type="button">Start game</button>
         <button id="statsBtn" type="button">My stats</button>
         <button id="contactBtn" type="button">Sponsor / contact</button>
