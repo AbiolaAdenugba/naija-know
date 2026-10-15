@@ -491,6 +491,8 @@
 
     gtag('config', 'G-LMWL1HQZCN');
   </script>
+  <!-- Supabase Client CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <div class="nk-app">
@@ -1528,6 +1530,72 @@
         initApp();
       }
     })();
+    /* ===================================================
+   SUPABASE REGISTRATION & MULTIPLAYER SETUP
+   =================================================== */
+const SUPABASE_URL = "https://xxprqaiufuaqujysosll.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_U_abPvSJ85Qy0_L2KEyEwg_K95X6XvY";
+
+const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+// 1. SAVE REGISTERED PLAYER TO SUPABASE TABLE
+async function registerPlayer(name, email, phone) {
+  if (!supabaseClient) return;
+  try {
+    const { data, error } = await supabaseClient
+      .from('Players')
+      .insert([{ name: name, email: email, phone: phone, score: 0 }]);
+    if (error) {
+      console.error("Supabase insert error:", error);
+    } else {
+      localStorage.setItem("nk_registered_player", JSON.stringify({ name, email, phone }));
+      alert("Registration successful! Welcome to Naija Know.");
+    }
+  } catch (err) {
+    console.error("Failed to register:", err);
+  }
+}
+
+// 2. MULTIPLAYER CHALLENGE ROOMS (1v1 Cross-Device)
+let multiplayerChannel = null;
+
+function createChallengeRoom(hostName) {
+  const roomId = "room_" + Math.random().toString(36).substring(2, 8);
+  const challengeUrl = `${window.location.origin}${window.location.pathname}?room=${roomId}`;
+  
+  // WhatsApp Share Link
+  const msg = encodeURIComponent(`🎮 I'm challenging you to a live round on Naija Know! Tap here to join: ${challengeUrl}`);
+  window.open(`https://api.whatsapp.com/send?text=${msg}`, '_blank');
+  
+  connectToRoom(roomId, hostName);
+}
+
+function connectToRoom(roomId, playerName) {
+  if (!supabaseClient) return;
+  multiplayerChannel = supabaseClient.channel(roomId, {
+    config: { broadcast: { self: true } }
+  });
+
+  multiplayerChannel
+    .on('broadcast', { event: 'opponent_score' }, ({ payload }) => {
+      console.log(`${payload.player} scored:`, payload.score);
+    })
+    .subscribe((status) => {
+      if (status === 'SUBSCRIBED') {
+        console.log(`Connected to room: ${roomId}`);
+      }
+    });
+}
+
+function sendScoreUpdate(playerName, currentScore) {
+  if (multiplayerChannel) {
+    multiplayerChannel.send({
+      type: 'broadcast',
+      event: 'opponent_score',
+      payload: { player: playerName, score: currentScore }
+    });
+  }
+}
   </script>
 </body>
 </html>
