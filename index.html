@@ -47,6 +47,64 @@
       justify-content: center;
       align-items: flex-start;
       padding: 12px 16px 32px 16px;
+      position: relative;
+    }
+
+    /* FULLSCREEN REGISTRATION MODAL FIX */
+    .nk-modal {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      background: rgba(0, 0, 0, 0.75) !important;
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      z-index: 999999 !important;
+      padding: 16px !important;
+      box-sizing: border-box !important;
+    }
+
+    .nk-modal.hidden {
+      display: none !important;
+    }
+
+    .nk-modal-card {
+      background: #ffffff !important;
+      color: var(--text) !important;
+      padding: 24px 20px !important;
+      border-radius: 14px !important;
+      max-width: 420px !important;
+      width: 100% !important;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.25) !important;
+    }
+
+    .nk-modal-card h3 {
+      font-size: 20px !important;
+      color: var(--primary) !important;
+      margin-bottom: 6px !important;
+    }
+
+    .nk-modal-card p {
+      font-size: 13px !important;
+      color: var(--text-muted) !important;
+      margin-bottom: 16px !important;
+      line-height: 1.45 !important;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      text-align: left;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
     }
 
     .nk-app {
@@ -482,42 +540,45 @@
       to { opacity: 1; transform: translateY(0); }
     }
   </style>
-<!-- Google tag (gtag.js) - Google Analytics -->
+
+  <!-- Google tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-LMWL1HQZCN"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-LMWL1HQZCN');
   </script>
+
   <!-- Supabase Client CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+
   <!-- REGISTRATION MODAL -->
-<div id="regModal" class="nk-modal">
-  <div class="nk-modal-card">
-    <h3>Welcome to Naija Know 🇳🇬</h3>
-    <p>Register once to save your scores, join live 1v1 challenges, and enter weekly prize leaderboards.</p>
-    <form id="regForm" onsubmit="handleRegistrationSubmit(event)">
-      <div class="form-group">
-        <label for="regName">Full Name</label>
-        <input type="text" id="regName" required placeholder="e.g. Tunde Adeyemi" />
-      </div>
-      <div class="form-group">
-        <label for="regEmail">Email Address</label>
-        <input type="email" id="regEmail" required placeholder="you@example.com" />
-      </div>
-      <div class="form-group">
-        <label for="regPhone">WhatsApp / Phone Number</label>
-        <input type="tel" id="regPhone" required placeholder="08012345678" />
-      </div>
-      <button type="submit" class="primary" style="margin-top:12px; width:100%;">Save & Continue</button>
-      <button type="button" class="text-btn" onclick="document.getElementById('regModal').classList.add('hidden')" style="margin-top:8px; width:100%; font-size:13px; color:#666; background:none; border:none; cursor:pointer;">Skip for now</button>
-    </form>
+  <div id="regModal" class="nk-modal hidden">
+    <div class="nk-modal-card">
+      <h3>Welcome to Naija Know 🇳🇬</h3>
+      <p>Enter your details to track your scores, challenge your friends, and get early access to upcoming features.</p>
+      <form id="regForm" onsubmit="handleRegistrationSubmit(event)">
+        <div class="form-group">
+          <label for="regName">Full Name</label>
+          <input type="text" id="regName" required placeholder="e.g. Tunde Adeyemi" />
+        </div>
+        <div class="form-group">
+          <label for="regEmail">Email Address</label>
+          <input type="email" id="regEmail" required placeholder="you@example.com" />
+        </div>
+        <div class="form-group">
+          <label for="regPhone">WhatsApp / Phone Number</label>
+          <input type="tel" id="regPhone" required placeholder="08012345678" />
+        </div>
+        <button type="submit" id="regSubmitBtn" class="primary" style="margin-top:12px; width:100%; font-weight:700;">Save & Continue</button>
+        <button type="button" onclick="skipRegistration()" style="margin-top:8px; width:100%; font-size:13px; color:var(--text-muted); background:none; border:none; cursor:pointer; min-height:36px;">Skip for now</button>
+      </form>
+    </div>
   </div>
-</div>
+
   <div class="nk-app">
     <div id="challengeBanner" class="nk-banner" hidden>
       <span id="challengeBannerText">🏆 Friend Challenge Alert!</span>
@@ -605,12 +666,12 @@
       </div>
 
       <div class="actions">
-        <a href="https://api.whatsapp.com/send?text=🎮%20I%20am%20challenging%20you%20to%20a%20round%20on%20Naija%20Know!%20Tap%20here%20to%20play:%20https://abiolaadenugba.github.io/naija-know/"
-       target="_blank"
-       rel="noopener noreferrer"
-       style="display:flex; justify-content:center; align-items:center; text-decoration:none; background:#25D366; color:#ffffff; font-weight:700; width:100%; min-height:46px; border-radius:8px; margin-bottom:10px; font-size:15px; box-sizing:border-box;">
-      📲 Challenge a Friend via WhatsApp
-    </a>
+        <button id="inviteFriendBtn" 
+                type="button" 
+                onclick="generateAndShareRoom()"
+                style="display:flex; justify-content:center; align-items:center; background:#25D366; color:#ffffff; font-weight:700; width:100%; min-height:46px; border:none; border-radius:8px; margin-bottom:4px; font-size:15px; cursor:pointer;">
+          📲 Challenge a Friend via WhatsApp
+        </button>
         <button id="start" class="primary" type="button">Start game</button>
         <button id="statsBtn" type="button">My stats</button>
         <button id="contactBtn" type="button">Sponsor / contact</button>
@@ -701,7 +762,7 @@
       </div>
     </section>
 
-    <!-- CONTACT / SPONSORSHIP FORM (CONFIGURED DIRECT TO FORMSPREE) -->
+    <!-- CONTACT / SPONSORSHIP FORM -->
     <section id="contact" class="panel" hidden>
       <p class="eyebrow">PARTNERSHIPS</p>
       <h2>Sponsorship enquiries</h2>
@@ -742,6 +803,105 @@
   </div>
 
   <script>
+    /* ===================================================
+       1. SUPABASE CONNECTION & MULTIPLAYER SETUP
+       =================================================== */
+    const SUPABASE_URL = "https://xxprqaiufuaqujysosll.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_U_abPvSJ85Qy0_L2KEyEwg_K95X6XvY";
+
+    const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+    let multiplayerChannel = null;
+
+    async function registerPlayer(name, email, phone) {
+      if (!supabaseClient) return;
+      try {
+        const { data, error } = await supabaseClient
+          .from('Players')
+          .insert([{ name: name, email: email, phone: phone, score: 0 }]);
+        if (error) {
+          console.error("Supabase insert error:", error);
+        }
+      } catch (err) {
+        console.error("Failed to register:", err);
+      }
+    }
+
+    async function handleRegistrationSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById("regSubmitBtn");
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Saving...";
+      }
+
+      const name = document.getElementById("regName").value.trim();
+      const email = document.getElementById("regEmail").value.trim();
+      const phone = document.getElementById("regPhone").value.trim();
+
+      await registerPlayer(name, email, phone);
+
+      localStorage.setItem("nk_registered_player", JSON.stringify({ name, email, phone }));
+      
+      const modal = document.getElementById("regModal");
+      if (modal) modal.classList.add("hidden");
+
+      const p1Input = document.getElementById("p1Name");
+      if (p1Input && name) p1Input.value = name;
+    }
+
+    function skipRegistration() {
+      const modal = document.getElementById("regModal");
+      if (modal) modal.classList.add("hidden");
+    }
+
+    function generateAndShareRoom() {
+      const p1NameInput = document.getElementById("p1Name");
+      const hostName = (p1NameInput && p1NameInput.value.trim()) || "Challenger";
+      
+      const roomId = "nk_" + Math.random().toString(36).substring(2, 8);
+      const roomLink = `${window.location.origin}${window.location.pathname}?room=${roomId}&host=${encodeURIComponent(hostName)}`;
+      
+      const inviteText = encodeURIComponent(`🎮 I am challenging you to a live round on Naija Know!\n\nTap here to accept and battle me directly: ${roomLink}`);
+      
+      initializeLiveGameRoom(roomId, hostName, true);
+      
+      window.open(`https://api.whatsapp.com/send?text=${inviteText}`, '_blank');
+    }
+
+    function initializeLiveGameRoom(roomId, playerName, isHost) {
+      if (!supabaseClient) return;
+
+      multiplayerChannel = supabaseClient.channel(roomId);
+
+      multiplayerChannel
+        .on('broadcast', { event: 'player_joined' }, ({ payload }) => {
+          alert(`🎉 ${payload.guest} joined the game! Starting 1v1 battle...`);
+          const p2Input = document.getElementById("p2Name");
+          if (p2Input) p2Input.value = payload.guest;
+
+          const modeSelect = document.getElementById("mode");
+          if (modeSelect) {
+            modeSelect.value = "duo";
+            modeSelect.dispatchEvent(new Event("change"));
+          }
+
+          const startBtn = document.getElementById("start");
+          if (startBtn) startBtn.click();
+        })
+        .subscribe((status) => {
+          if (status === 'SUBSCRIBED' && !isHost) {
+            multiplayerChannel.send({
+              type: 'broadcast',
+              event: 'player_joined',
+              payload: { guest: playerName }
+            });
+          }
+        });
+    }
+
+    /* ===================================================
+       2. MAIN APPLICATION CORE
+       =================================================== */
     (() => {
       "use strict";
 
@@ -759,12 +919,12 @@
       ];
 
       const s = {
-        mode: "solo", // "solo" or "duo"
+        mode: "solo",
         p1: "Player 1",
         p2: "Player 2",
         p1Score: 0,
         p2Score: 0,
-        currentTurn: 1, // 1 or 2
+        currentTurn: 1,
         pool: [],
         i: 0,
         score: 0,
@@ -786,8 +946,24 @@
         try {
           const params = new URLSearchParams(window.location.search);
           const challengeScore = params.get("challenge");
+          const incomingRoom = params.get("room");
+          const hostName = params.get("host");
 
-          if (challengeScore !== null) {
+          if (incomingRoom) {
+            const guestName = prompt(`You have been challenged by ${hostName || "a friend"}! Enter your name to join:`) || "Player 2";
+            const p1Input = $("p1Name");
+            const p2Input = $("p2Name");
+            const modeSelect = $("mode");
+
+            if (p1Input) p1Input.value = hostName || "Player 1";
+            if (p2Input) p2Input.value = guestName;
+            if (modeSelect) {
+              modeSelect.value = "duo";
+              modeSelect.dispatchEvent(new Event("change"));
+            }
+
+            initializeLiveGameRoom(incomingRoom, guestName, false);
+          } else if (challengeScore !== null) {
             const banner = $("challengeBanner");
             const bannerText = $("challengeBannerText");
             if (banner && bannerText) {
@@ -796,9 +972,7 @@
 
               const dismissBtn = $("dismissBannerBtn");
               if (dismissBtn) {
-                dismissBtn.onclick = () => {
-                  banner.hidden = true;
-                };
+                dismissBtn.onclick = () => { banner.hidden = true; };
               }
             }
           }
@@ -811,11 +985,9 @@
         return `https://abiolaadenugba.github.io/naija-know/?challenge=${score}`;
       }
 
-      // -------------------------------------------------------------
-      // MASTER QUESTION BANK - STRICTLY CATEGORIZED
-      // -------------------------------------------------------------
+      // MASTER QUESTION BANK
       const BANK = [
-        // ======================== SPORTS ========================
+        // SPORTS
         { category: "Sports", level: "Easy", question: "What is the official nickname of Nigeria's senior men's national football team?", options: ["Super Eagles", "Green Eagles", "D'Tigers", "Black Stars"], answer: 0, explanation: "Nigeria's senior men's national football team is known as the Super Eagles." },
         { category: "Sports", level: "Easy", question: "What is the nickname of Nigeria's senior women's national football team?", options: ["Super Falcons", "D'Tigress", "Flamingos", "Falconets"], answer: 0, explanation: "The women's senior national team is called the Super Falcons." },
         { category: "Sports", level: "Easy", question: "How many players start on the pitch for one team in an association football match?", options: ["11", "10", "9", "12"], answer: 0, explanation: "A standard association football team fields 11 players including the goalkeeper." },
@@ -832,7 +1004,7 @@
         { category: "Sports", level: "Hard", question: "Who won Nigeria's first-ever Olympic medal (a bronze in boxing) at Tokyo in 1964?", options: ["Nojim Maiyegun", "Peter Konyegwachie", "David Izonritei", "Duncan Dokiwari"], answer: 0, explanation: "Nojim Maiyegun won bronze in men's light middleweight boxing at Tokyo 1964." },
         { category: "Sports", level: "Hard", question: "Which Nigerian table tennis legend competed in seven consecutive Olympic Games (1992 to 2016)?", options: ["Segun Toriola", "Quadri Aruna", "Bose Kaffo", "Atanda Musa"], answer: 0, explanation: "Segun Toriola represented Nigeria in table tennis across seven straight Olympic Games." },
 
-        // ======================== ENTERTAINMENT ========================
+        // ENTERTAINMENT
         { category: "Entertainment", level: "Easy", question: "Which music genre was pioneered and popularized globally by Fela Anikulapo Kuti?", options: ["Afrobeat", "Highlife", "Apala", "Reggae"], answer: 0, explanation: "Fela Kuti created Afrobeat by blending highlife, jazz, funk, and chants." },
         { category: "Entertainment", level: "Easy", question: "Who released the hit single 'Fall' and founded the DMW record label?", options: ["Davido", "Wizkid", "Burna Boy", "Rema"], answer: 0, explanation: "Davido (David Adeleke) released 'Fall' and founded Davido Music Worldwide." },
         { category: "Entertainment", level: "Easy", question: "Which comedy actor is famed for portraying the beloved screen character 'Mr Ibu'?", options: ["John Okafor", "Nkem Owoh", "Sam Loco Efe", "Chiwetalu Agu"], answer: 0, explanation: "John Okafor was celebrated across Africa for his iconic role as Mr Ibu." },
@@ -849,7 +1021,7 @@
         { category: "Entertainment", level: "Hard", question: "What is the title of Ben Okri's 1991 novel that won the prestigious Booker Prize?", options: ["The Famished Road", "Songs of Enchantment", "Astonishing the Gods", "Dangerous Love"], answer: 0, explanation: "Ben Okri won the Booker Prize with his masterwork 'The Famished Road'." },
         { category: "Entertainment", level: "Hard", question: "Which legendary artist created the famous bronze statue of Queen Elizabeth II in 1957?", options: ["Ben Enwonwu", "Bruce Onobrakpeya", "Yusuf Grillo", "Uche Okeke"], answer: 0, explanation: "Ben Enwonwu MBE was commissioned to sculpt Queen Elizabeth II in London." },
 
-        // ======================== BUSINESS ========================
+        // BUSINESS
         { category: "Business", level: "Easy", question: "What is the official currency of Nigeria?", options: ["Naira", "Cedi", "Dalasi", "Rand"], answer: 0, explanation: "Nigeria's official currency is the Naira, issued by the Central Bank of Nigeria." },
         { category: "Business", level: "Easy", question: "What does SME stand for in commerce?", options: ["Small and Medium Enterprises", "State Management Entity", "Standard Monetary Entry", "System Marketing Estimate"], answer: 0, explanation: "SME stands for Small and Medium Enterprises." },
         { category: "Business", level: "Easy", question: "What is a budget?", options: ["A plan for estimating income and expenses", "A customer register", "A list of bank accounts", "An employment contract"], answer: 0, explanation: "A budget is an itemized financial forecast of revenues and expenditures." },
@@ -863,7 +1035,7 @@
         { category: "Business", level: "Hard", question: "Which landmark corporate law replaced CAMA 1990 in Nigeria?", options: ["Companies and Allied Matters Act (CAMA) 2020", "Financial Acts Ordinance 2018", "Investments and Securities Act 2007", "Corporate Governance Charter 2015"], answer: 0, explanation: "CAMA 2020 introduced modern corporate legal provisions in Nigeria." },
         { category: "Business", level: "Hard", question: "What does EBITDA stand for?", options: ["Earnings Before Interest, Taxes, Depreciation, and Amortisation", "Equity Before Income, Trade, Debt, and Accounting", "Estimated Balance In Trade, Debt, and Assets", "Enterprise Budget Including Taxes, Debt, and Amortisation"], answer: 0, explanation: "EBITDA evaluates core operational profitability." },
 
-        // ======================== NIGERIA HISTORY ========================
+        // NIGERIA HISTORY
         { category: "Nigeria History", level: "Easy", question: "In what year did Nigeria gain independence from British rule?", options: ["1960", "1957", "1963", "1970"], answer: 0, explanation: "Nigeria gained sovereign independence on 1 October 1960." },
         { category: "Nigeria History", level: "Easy", question: "Who was Nigeria's first and only federal Prime Minister?", options: ["Abubakar Tafawa Balewa", "Nnamdi Azikiwe", "Ahmadu Bello", "Obafemi Awolowo"], answer: 0, explanation: "Sir Abubakar Tafawa Balewa served as prime minister until January 1966." },
         { category: "Nigeria History", level: "Easy", question: "What city was the federal capital of Nigeria prior to December 1991?", options: ["Lagos", "Ibadan", "Calabar", "Kaduna"], answer: 0, explanation: "Lagos served as the federal capital before power moved to Abuja." },
@@ -873,7 +1045,7 @@
         { category: "Nigeria History", level: "Medium", question: "Which anti-colonial tax protest was led by women in Eastern Nigeria in 1929?", options: ["Aba Women's War", "Egba Uprising", "Enugu Colliery Strike", "Ijebu Resistance"], answer: 0, explanation: "The 1929 Aba Women's War was a mass protest against colonial taxes." },
         { category: "Nigeria History", level: "Hard", question: "Which King of Opobo was arrested and exiled to Saint Vincent by the British in 1887?", options: ["King Jaja of Opobo", "King Koko of Nembe", "Nana Olomu of Itsekiri", "Oba Ovonramwen"], answer: 0, explanation: "King Jaja of Opobo was deposed and exiled for defending independent palm oil trade." },
 
-        // ======================== CULTURE ========================
+        // CULTURE
         { category: "Culture", level: "Easy", question: "Which staple swallow food is processed from cassava roots into roasted granules?", options: ["Garri", "Pounded yam", "Amala", "Tuwo"], answer: 0, explanation: "Garri is processed by grating, fermenting, pressing, and roasting cassava." },
         { category: "Culture", level: "Easy", question: "Aso-oke is a prestige handwoven textile associated with which Nigerian people?", options: ["Yoruba", "Igbo", "Hausa", "Ibibio"], answer: 0, explanation: "Aso-oke is woven on horizontal looms primarily by Yoruba weavers." },
         { category: "Culture", level: "Easy", question: "What is a 'gele' in traditional attire?", options: ["A fabric headwrap", "A carved neck bead", "A decorative leather boot", "A ceremonial wrist cuff"], answer: 0, explanation: "A gele is an elaborate traditional headwrap worn by women." },
@@ -882,7 +1054,7 @@
         { category: "Culture", level: "Medium", question: "What is Suya?", options: ["Skewered, spicy grilled beef coated with yaji", "A steamed bean cake", "A fermented millet drink", "A vegetable soup"], answer: 0, explanation: "Suya is thinly sliced grilled meat spiced with yaji (ground pepper, peanut flour)." },
         { category: "Culture", level: "Hard", question: "Which archaeological site in central Nigeria yielded terracotta figurines dating to 500 BC?", options: ["Nok", "Daima", "Igbo-Ukwu", "Mejiro"], answer: 0, explanation: "Nok culture in Kaduna State produced iconic terracotta sculptures." },
 
-        // ======================== GENERAL KNOWLEDGE ========================
+        // GENERAL KNOWLEDGE
         { category: "General Knowledge", level: "Easy", question: "How many states are in Nigeria?", options: ["36", "30", "38", "34"], answer: 0, explanation: "Nigeria consists of 36 states and the Federal Capital Territory (FCT), Abuja." },
         { category: "General Knowledge", level: "Easy", question: "Which planet in our solar system is nicknamed the Red Planet?", options: ["Mars", "Venus", "Jupiter", "Mercury"], answer: 0, explanation: "Iron oxide on the surface of Mars gives it a reddish appearance." },
         { category: "General Knowledge", level: "Easy", question: "What is Earth's largest ocean?", options: ["Pacific Ocean", "Atlantic Ocean", "Indian Ocean", "Arctic Ocean"], answer: 0, explanation: "The Pacific Ocean is the largest and deepest ocean basin on Earth." },
@@ -890,7 +1062,7 @@
         { category: "General Knowledge", level: "Medium", question: "What is the confluence town where Rivers Niger and Benue meet?", options: ["Lokoja", "Makurdi", "Onitsha", "Jebba"], answer: 0, explanation: "Rivers Niger and Benue meet at Lokoja in Kogi State." },
         { category: "General Knowledge", level: "Hard", question: "What is the highest mountain peak in Nigeria?", options: ["Chappal Waddi", "Zuma Rock", "Olumo Rock", "Shere Hills"], answer: 0, explanation: "Chappal Waddi in Taraba State rises to 2,419 metres above sea level." },
 
-        // ======================== RELATIONSHIPS ========================
+        // RELATIONSHIPS
         ...Array.from({ length: 15 }, (_, i) => ({
           category: "Relationships",
           level: i < 5 ? "Easy" : i < 10 ? "Medium" : "Hard",
@@ -917,7 +1089,7 @@
           prompt: true
         })),
 
-        // ======================== FRIENDSHIPS ========================
+        // FRIENDSHIPS
         ...Array.from({ length: 15 }, (_, i) => ({
           category: "Friendships",
           level: i < 5 ? "Easy" : i < 10 ? "Medium" : "Hard",
@@ -944,7 +1116,7 @@
           prompt: true
         })),
 
-        // ======================== COUPLES MOMENTS ========================
+        // COUPLES MOMENTS
         ...Array.from({ length: 15 }, (_, i) => ({
           category: "Couples Moments",
           level: i < 5 ? "Easy" : i < 10 ? "Medium" : "Hard",
@@ -971,7 +1143,7 @@
           prompt: true
         })),
 
-        // ======================== TRUTH OR DARE ========================
+        // TRUTH OR DARE
         ...Array.from({ length: 15 }, (_, i) => ({
           category: "Truth or Dare",
           level: i < 5 ? "Easy" : i < 10 ? "Medium" : "Hard",
@@ -998,7 +1170,7 @@
           prompt: true
         })),
 
-        // ======================== MARITAL QUESTIONS ========================
+        // MARITAL QUESTIONS
         ...Array.from({ length: 15 }, (_, i) => ({
           category: "Marital Questions",
           level: i < 5 ? "Easy" : i < 10 ? "Medium" : "Hard",
@@ -1106,7 +1278,6 @@
         s.started = Date.now();
         s.logs = [];
 
-        // Configure Game UI for Solo vs Duo
         const isDuo = s.mode === "duo";
         $("soloScoreWrap").hidden = isDuo;
         $("duoScoreWrap").hidden = !isDuo;
@@ -1285,7 +1456,6 @@
       function next() {
         if (!s.locked) return;
         s.i++;
-        // Alternate turns for 2-player mode
         if (s.mode === "duo") {
           s.currentTurn = s.currentTurn === 1 ? 2 : 1;
         }
@@ -1499,7 +1669,6 @@
           if (el) el.onclick = fn;
         };
 
-        // Listen for Mode Change
         const modeEl = $("mode");
         if (modeEl) {
           modeEl.onchange = () => {
@@ -1549,6 +1718,21 @@
         const cForm = $("contactForm");
         if (cForm) cForm.onsubmit = handleContact;
 
+        // Auto display registration modal if not yet registered
+        const savedPlayer = localStorage.getItem("nk_registered_player");
+        if (!savedPlayer) {
+          setTimeout(() => {
+            const regModal = $("regModal");
+            if (regModal) regModal.classList.remove("hidden");
+          }, 600);
+        } else {
+          try {
+            const parsed = JSON.parse(savedPlayer);
+            const p1Input = $("p1Name");
+            if (p1Input && parsed.name) p1Input.value = parsed.name;
+          } catch(e) {}
+        }
+
         checkIncomingChallenge();
         screen("setup");
       }
@@ -1559,87 +1743,6 @@
         initApp();
       }
     })();
-    /* ===================================================
-   SUPABASE REGISTRATION & MULTIPLAYER SETUP
-   =================================================== */
-const SUPABASE_URL = "https://xxprqaiufuaqujysosll.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_U_abPvSJ85Qy0_L2KEyEwg_K95X6XvY";
-
-const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
-
-// 1. SAVE REGISTERED PLAYER TO SUPABASE TABLE
-async function registerPlayer(name, email, phone) {
-  if (!supabaseClient) return;
-  try {
-    const { data, error } = await supabaseClient
-      .from('Players')
-      .insert([{ name: name, email: email, phone: phone, score: 0 }]);
-    if (error) {
-      console.error("Supabase insert error:", error);
-    } else {
-      localStorage.setItem("nk_registered_player", JSON.stringify({ name, email, phone }));
-      alert("Registration successful! Welcome to Naija Know.");
-    }
-  } catch (err) {
-    console.error("Failed to register:", err);
-  }
-}
-
-// 2. MULTIPLAYER CHALLENGE ROOMS (1v1 Cross-Device)
-let multiplayerChannel = null;
-
-function createChallengeRoom(hostName) {
-  const roomId = "room_" + Math.random().toString(36).substring(2, 8);
-  const challengeUrl = `${window.location.origin}${window.location.pathname}?room=${roomId}`;
-  
-  // WhatsApp Share Link
-  const msg = encodeURIComponent(`🎮 I'm challenging you to a live round on Naija Know! Tap here to join: ${challengeUrl}`);
-  window.open(`https://api.whatsapp.com/send?text=${msg}`, '_blank');
-  
-  connectToRoom(roomId, hostName);
-}
-
-function connectToRoom(roomId, playerName) {
-  if (!supabaseClient) return;
-  multiplayerChannel = supabaseClient.channel(roomId, {
-    config: { broadcast: { self: true } }
-  });
-
-  multiplayerChannel
-    .on('broadcast', { event: 'opponent_score' }, ({ payload }) => {
-      console.log(`${payload.player} scored:`, payload.score);
-    })
-    .subscribe((status) => {
-      if (status === 'SUBSCRIBED') {
-        console.log(`Connected to room: ${roomId}`);
-      }
-    });
-}
-
-function sendScoreUpdate(playerName, currentScore) {
-  if (multiplayerChannel) {
-    multiplayerChannel.send({
-      type: 'broadcast',
-      event: 'opponent_score',
-      payload: { player: playerName, score: currentScore }
-    });
-  }
-}
-    // DIRECT WHATSAPP CHALLENGE LISTENER
-document.addEventListener('DOMContentLoaded', () => {
-  const inviteBtn = document.getElementById('inviteFriendBtn');
-  if (inviteBtn) {
-    inviteBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const roomId = 'room_' + Math.random().toString(36).substring(2, 8);
-      const gameUrl = `${window.location.origin}${window.location.pathname}?room=${roomId}`;
-      const message = encodeURIComponent(`🎮 Naija Know Challenge!\nI'm ready to play 1v1 with you. Tap here to join my room:\n${gameUrl}`);
-      
-      // Direct redirect to WhatsApp web / app
-      window.location.href = `https://api.whatsapp.com/send?text=${message}`;
-    });
-  }
-});
   </script>
 </body>
 </html>
