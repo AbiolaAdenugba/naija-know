@@ -605,10 +605,11 @@
       </div>
 
       <div class="actions">
-        <button id="inviteFriendBtn" type="button" style="background:#25D366; color:#ffffff; font-weight:700; width:100%; min-height:44px; border:none; border-radius:8px; margin-bottom:12px; font-size:15px; cursor:pointer;" onclick="triggerWhatsAppChallenge()">
-  📲 Challenge a Friend via WhatsApp
-</button>
-<button id="start" class="primary" type="button">Start game</button>
+        <a id="inviteFriendBtn" 
+           href="#" 
+           style="display:flex; justify-content:center; align-items:center; text-decoration:none; background:#25D366; color:#ffffff; font-weight:700; width:100%; min-height:46px; border-radius:8px; margin-bottom:10px; font-size:15px; box-sizing:border-box;">
+          📲 Challenge a Friend via WhatsApp
+        </a>
         <button id="start" class="primary" type="button">Start game</button>
         <button id="statsBtn" type="button">My stats</button>
         <button id="contactBtn" type="button">Sponsor / contact</button>
@@ -1623,6 +1624,21 @@ function sendScoreUpdate(playerName, currentScore) {
     });
   }
 }
+    // DIRECT WHATSAPP CHALLENGE LISTENER
+document.addEventListener('DOMContentLoaded', () => {
+  const inviteBtn = document.getElementById('inviteFriendBtn');
+  if (inviteBtn) {
+    inviteBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const roomId = 'room_' + Math.random().toString(36).substring(2, 8);
+      const gameUrl = `${window.location.origin}${window.location.pathname}?room=${roomId}`;
+      const message = encodeURIComponent(`🎮 Naija Know Challenge!\nI'm ready to play 1v1 with you. Tap here to join my room:\n${gameUrl}`);
+      
+      // Direct redirect to WhatsApp web / app
+      window.location.href = `https://api.whatsapp.com/send?text=${message}`;
+    });
+  }
+});
   </script>
 </body>
 </html>
