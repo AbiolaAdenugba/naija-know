@@ -110,6 +110,7 @@
       flex-direction: column;
       gap: 12px;
       margin: 0 auto;
+      position: relative;
     }
 
     .nk-banner {
@@ -203,6 +204,7 @@
       flex-direction: column;
       gap: 14px;
       width: 100%;
+      position: relative;
     }
 
     .eyebrow {
@@ -387,6 +389,37 @@
     }
 
     .feedback strong { display: block; margin-bottom: 4px; font-size: 15px; }
+
+    /* REMOTE OPPONENT TURN LOCK OVERLAY */
+    .opponent-waiting-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(2px);
+      z-index: 100;
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .opponent-waiting-overlay h3 {
+      color: #92400e;
+      margin-bottom: 8px;
+    }
+
+    .opponent-waiting-overlay p {
+      font-size: 14px;
+      color: #5a6578;
+      max-width: 280px;
+      line-height: 1.4;
+    }
 
     .statsGrid {
       display: grid;
@@ -574,7 +607,7 @@
         </label>
       </div>
 
-      <!-- Player Names (Dynamically shown in 2-player mode) -->
+      <!-- Player Names -->
       <div id="duoNamesRow" class="fields" style="display: none;">
         <label for="p1Name">Player 1 Name
           <input id="p1Name" type="text" value="Player 1" maxlength="15">
@@ -626,6 +659,12 @@
     </section>
 
     <section id="game" class="panel" hidden>
+      <!-- OPPONENT WAITING LOCK OVERLAY -->
+      <div id="opponentWaitingOverlay" class="opponent-waiting-overlay" style="display:none;">
+        <h3>⏳ Opponent's Turn</h3>
+        <p id="waitingMessage">Please wait while your opponent reads and answers their question on their phone...</p>
+      </div>
+
       <div class="gamehead">
         <div>
           <span id="turnIndicator" class="turn-indicator" hidden>Player 1's Turn</span>
@@ -758,7 +797,7 @@
     const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
     let multiplayerChannel = null;
 
-    let localPlayerRole = "solo";
+    let localPlayerRole = "solo"; // "solo", "p1", or "p2"
     let isRemoteChallenge = false;
     let pendingJoinRoom = null;
 
@@ -828,7 +867,7 @@
 
       if (pendingJoinRoom) {
         localPlayerRole = "p2";
-        const fallbackName = "Challenger 2";
+        const fallbackName = "Player 2";
         const p2Input = document.getElementById("p2Name");
         if (p2Input) p2Input.value = fallbackName;
         connectToLiveRoom(pendingJoinRoom.roomId, fallbackName, pendingJoinRoom.hostName, false);
@@ -838,7 +877,7 @@
 
     function generateAndShareRoom() {
       const p1NameInput = document.getElementById("p1Name");
-      const hostName = (p1NameInput && p1NameInput.value.trim()) || "Host Player";
+      const hostName = (p1NameInput && p1NameInput.value.trim()) || "Player 1";
       
       const roomId = "nk_" + Math.random().toString(36).substring(2, 8);
       const roomLink = `${window.location.origin}${window.location.pathname}?room=${roomId}&host=${encodeURIComponent(hostName)}`;
@@ -850,7 +889,7 @@
 
       const inviteText = encodeURIComponent(`🎮 I challenge you to a live 1v1 round on Naija Know!\n\nTap here to accept and battle: ${roomLink}`);
       window.open(`https://api.whatsapp.com/send?text=${inviteText}`, '_blank');
-      alert("Challenge created! Waiting for your opponent to open WhatsApp and join...");
+      alert("Room created! Waiting for your opponent to tap the link and join...");
     }
 
     function connectToLiveRoom(roomId, playerName, hostName, isHost) {
@@ -915,7 +954,6 @@
         });
     }
 
-    // Explicit UI Toggle function for 2-Player mode
     function toggleGameMode(mode) {
       const duoRow = document.getElementById("duoNamesRow");
       if (duoRow) {
@@ -1385,10 +1423,23 @@
       $("next").hidden = true;
       $("skip").hidden = false;
 
+      // STRICT MULTI-DEVICE TURN ENFORCEMENT
       const isRemoteTurn = isRemoteChallenge && ((localPlayerRole === "p1" && s.currentTurn !== 1) || (localPlayerRole === "p2" && s.currentTurn !== 2));
+      const waitingOverlay = $("opponentWaitingOverlay");
+      const waitingMessage = $("waitingMessage");
+
+      if (isRemoteTurn) {
+        const activeName = s.currentTurn === 1 ? s.p1 : s.p2;
+        if (waitingOverlay) waitingOverlay.style.display = "flex";
+        if (waitingMessage) waitingMessage.textContent = `Please wait while ${activeName} reads and answers this question on their phone...`;
+        $("timer").textContent = `Waiting for ${activeName}...`;
+        $("skip").hidden = true;
+      } else {
+        if (waitingOverlay) waitingOverlay.style.display = "none";
+      }
 
       if (q.prompt) {
-        $("timer").textContent = "Untimed (Chat freely)";
+        if (!isRemoteTurn) $("timer").textContent = "Untimed (Chat freely)";
         const note = document.createElement("div");
         note.className = "feedback";
         note.innerHTML = "<strong>Conversation Prompt</strong><p>Share what feels comfortable, or pass without pressure.</p>";
@@ -1407,7 +1458,7 @@
           $("answers").append(b);
         });
       } else {
-        $("timer").textContent = s.time;
+        if (!isRemoteTurn) $("timer").textContent = s.time;
         const correctText = q.options[q.answer];
 
         q.options.forEach((optText, idx) => {
@@ -1420,18 +1471,19 @@
           $("answers").append(b);
         });
 
-        s.timer = setInterval(() => {
-          if (s.locked) return;
-          s.time--;
-          $("timer").textContent = Math.max(0, s.time);
-          if (s.time <= 0) {
-            stop();
-            if (!isRemoteTurn) {
+        // Countdown timer ticks ONLY on the active player's phone
+        if (!isRemoteTurn) {
+          s.timer = setInterval(() => {
+            if (s.locked) return;
+            s.time--;
+            $("timer").textContent = Math.max(0, s.time);
+            if (s.time <= 0) {
+              stop();
               broadcastAction({ action: "timeout" });
               handleTimeout(q);
             }
-          }
-        }, 1000);
+          }, 1000);
+        }
       }
     }
 
@@ -1443,6 +1495,10 @@
       p.textContent = exp;
       $("feedback").append(strong, p);
       $("feedback").hidden = false;
+
+      // Close lock screen once an answer is revealed so both players see the result
+      const waitingOverlay = $("opponentWaitingOverlay");
+      if (waitingOverlay) waitingOverlay.style.display = "none";
 
       const isRemoteTurn = isRemoteChallenge && ((localPlayerRole === "p1" && s.currentTurn !== 1) || (localPlayerRole === "p2" && s.currentTurn !== 2));
       if (!isRemoteTurn) {
