@@ -22,9 +22,7 @@
       --p2: #d97706;
     }
 
-    [hidden] {
-      display: none !important;
-    }
+    [hidden] { display: none !important; }
 
     * {
       box-sizing: border-box;
@@ -50,7 +48,7 @@
       position: relative;
     }
 
-    /* FULLSCREEN REGISTRATION MODAL */
+    /* FULLSCREEN MODAL OVERLAY */
     .nk-modal {
       position: fixed !important;
       top: 0 !important;
@@ -66,9 +64,7 @@
       box-sizing: border-box !important;
     }
 
-    .nk-modal.hidden {
-      display: none !important;
-    }
+    .nk-modal.hidden { display: none !important; }
 
     .nk-modal-card {
       background: #ffffff !important;
@@ -217,27 +213,10 @@
       text-transform: uppercase;
     }
 
-    h2 {
-      font-size: 20px;
-      font-weight: 700;
-      line-height: 1.3;
-    }
-
-    h3 {
-      font-size: 17px;
-      font-weight: 600;
-      line-height: 1.35;
-    }
-
-    .subtext, .small {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.4;
-    }
-
-    .small {
-      font-size: 12px;
-    }
+    h2 { font-size: 20px; font-weight: 700; line-height: 1.3; }
+    h3 { font-size: 17px; font-weight: 600; line-height: 1.35; }
+    .subtext, .small { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
+    .small { font-size: 12px; }
 
     .fields {
       display: grid;
@@ -246,9 +225,7 @@
     }
 
     @media (min-width: 440px) {
-      .fields {
-        grid-template-columns: 1fr 1fr;
-      }
+      .fields { grid-template-columns: 1fr 1fr; }
     }
 
     label {
@@ -282,9 +259,7 @@
       padding-right: 32px;
     }
 
-    select:focus, input:focus, textarea:focus {
-      border-color: var(--primary);
-    }
+    select:focus, input:focus, textarea:focus { border-color: var(--primary); }
 
     .actions {
       display: flex;
@@ -310,9 +285,7 @@
       transition: background 0.15s ease, transform 0.05s ease;
     }
 
-    button:active {
-      transform: scale(0.99);
-    }
+    button:active { transform: scale(0.99); }
 
     button.primary {
       background: var(--primary);
@@ -320,9 +293,7 @@
       color: #fff;
     }
 
-    button.primary:hover {
-      background: var(--primary-hover);
-    }
+    button.primary:hover { background: var(--primary-hover); }
 
     .gamehead {
       display: flex;
@@ -342,15 +313,8 @@
       margin-bottom: 4px;
     }
 
-    .turn-p1 {
-      background: #dbeafe;
-      color: var(--p1);
-    }
-
-    .turn-p2 {
-      background: #fef3c7;
-      color: var(--p2);
-    }
+    .turn-p1 { background: #dbeafe; color: var(--p1); }
+    .turn-p2 { background: #fef3c7; color: var(--p2); }
 
     .scores-row {
       display: flex;
@@ -398,10 +362,7 @@
       justify-content: flex-start;
     }
 
-    .answer b {
-      margin-right: 8px;
-      color: var(--primary);
-    }
+    .answer b { margin-right: 8px; color: var(--primary); }
 
     .answer.correct {
       background: #e8f5e9 !important;
@@ -425,11 +386,7 @@
       line-height: 1.4;
     }
 
-    .feedback strong {
-      display: block;
-      margin-bottom: 4px;
-      font-size: 15px;
-    }
+    .feedback strong { display: block; margin-bottom: 4px; font-size: 15px; }
 
     .statsGrid {
       display: grid;
@@ -453,10 +410,7 @@
       margin-bottom: 2px;
     }
 
-    .statsGrid strong {
-      font-size: 18px;
-      color: var(--text);
-    }
+    .statsGrid strong { font-size: 18px; color: var(--text); }
 
     .versus-banner {
       background: #eff6ff;
@@ -485,15 +439,9 @@
       gap: 10px;
     }
 
-    .share-box h3 {
-      color: #166534;
-      font-size: 16px;
-    }
+    .share-box h3 { color: #166534; font-size: 16px; }
 
-    .share-input-row {
-      display: flex;
-      gap: 8px;
-    }
+    .share-input-row { display: flex; gap: 8px; }
 
     .share-input-row input {
       flex: 1;
@@ -524,9 +472,7 @@
       text-align: center;
     }
 
-    .whatsapp-btn:hover {
-      background: #1ebd5b;
-    }
+    .whatsapp-btn:hover { background: #1ebd5b; }
 
     footer {
       text-align: center;
@@ -559,7 +505,7 @@
   <div id="regModal" class="nk-modal hidden">
     <div class="nk-modal-card">
       <h3>Welcome to Naija Know 🇳🇬</h3>
-      <p>Enter your details to track your scores, challenge your friends, and get early access to upcoming features.</p>
+      <p id="regModalSubtitle">Enter your details to track your scores, challenge your friends, and get early access to upcoming features.</p>
       <form id="regForm" onsubmit="handleRegistrationSubmit(event)">
         <div class="form-group">
           <label for="regName">Full Name</label>
@@ -574,7 +520,7 @@
           <input type="tel" id="regPhone" required placeholder="08012345678" />
         </div>
         <button type="submit" id="regSubmitBtn" class="primary" style="margin-top:12px; width:100%; font-weight:700;">Save & Continue</button>
-        <button type="button" onclick="skipRegistration()" style="margin-top:8px; width:100%; font-size:13px; color:var(--text-muted); background:none; border:none; cursor:pointer; min-height:36px;">Skip for now</button>
+        <button type="button" id="regSkipBtn" onclick="skipRegistration()" style="margin-top:8px; width:100%; font-size:13px; color:var(--text-muted); background:none; border:none; cursor:pointer; min-height:36px;">Skip for now</button>
       </form>
     </div>
   </div>
@@ -628,7 +574,7 @@
         </label>
       </div>
 
-      <!-- Player Names (Shown when 2-Player mode is selected) -->
+      <!-- Player Names -->
       <div id="duoNamesRow" class="fields" hidden>
         <label for="p1Name">Player 1 Name
           <input id="p1Name" type="text" value="Player 1" maxlength="15">
@@ -804,7 +750,7 @@
 
   <script>
     /* ===================================================
-       1. SUPABASE CONNECTION & MULTIPLAYER SETUP
+       1. SUPABASE CONNECTION & REALTIME MULTIPLAYER STATE
        =================================================== */
     const SUPABASE_URL = "https://xxprqaiufuaqujysosll.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_U_abPvSJ85Qy0_L2KEyEwg_K95X6XvY";
@@ -812,15 +758,17 @@
     const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
     let multiplayerChannel = null;
 
+    let localPlayerRole = "solo"; // "solo", "p1" (host), or "p2" (guest)
+    let isRemoteChallenge = false;
+    let pendingJoinRoom = null;
+
     async function registerPlayer(name, email, phone) {
       if (!supabaseClient) return;
       try {
-        const { data, error } = await supabaseClient
+        const { error } = await supabaseClient
           .from('Players')
-          .insert([{ name: name, email: email, phone: phone, score: 0 }]);
-        if (error) {
-          console.error("Supabase insert error:", error);
-        }
+          .insert([{ name, email, phone, score: 0 }]);
+        if (error) console.error("Supabase insert error:", error);
       } catch (err) {
         console.error("Failed to register:", err);
       }
@@ -839,54 +787,128 @@
       const phone = document.getElementById("regPhone").value.trim();
 
       await registerPlayer(name, email, phone);
-
       localStorage.setItem("nk_registered_player", JSON.stringify({ name, email, phone }));
       
       const modal = document.getElementById("regModal");
       if (modal) modal.classList.add("hidden");
 
-      const p1Input = document.getElementById("p1Name");
-      if (p1Input && name) p1Input.value = name;
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "Save & Continue";
+      }
+
+      if (pendingJoinRoom) {
+        localPlayerRole = "p2";
+        const p2Input = document.getElementById("p2Name");
+        if (p2Input) p2Input.value = name;
+        connectToLiveRoom(pendingJoinRoom.roomId, name, pendingJoinRoom.hostName, false);
+        pendingJoinRoom = null;
+      } else {
+        const p1Input = document.getElementById("p1Name");
+        if (p1Input && name) p1Input.value = name;
+      }
     }
 
-    function skipRegistration() {
-      const modal = document.getElementById("regModal");
-      if (modal) modal.classList.add("hidden");
+function skipRegistration() {
+  const modal = document.getElementById("regModal");
+  if (modal) modal.classList.add("hidden");
+  ...
+}
+    async function updatePlayerScoreInDB(email, finalScore) {
+  if (!supabaseClient || !email) return;
+  try {
+    const { error } = await supabaseClient
+      .from('Players')
+      .update({ score: finalScore })
+      .eq('email', email);
+
+    if (error) console.error("Could not update score:", error);
+  } catch (err) {
+    console.error("Score update error:", err);
+  }
+}
+
+      if (pendingJoinRoom) {
+        localPlayerRole = "p2";
+        const fallbackName = "Challenger 2";
+        const p2Input = document.getElementById("p2Name");
+        if (p2Input) p2Input.value = fallbackName;
+        connectToLiveRoom(pendingJoinRoom.roomId, fallbackName, pendingJoinRoom.hostName, false);
+        pendingJoinRoom = null;
+      }
     }
 
     function generateAndShareRoom() {
       const p1NameInput = document.getElementById("p1Name");
-      const hostName = (p1NameInput && p1NameInput.value.trim()) || "Challenger";
+      const hostName = (p1NameInput && p1NameInput.value.trim()) || "Host Player";
       
       const roomId = "nk_" + Math.random().toString(36).substring(2, 8);
       const roomLink = `${window.location.origin}${window.location.pathname}?room=${roomId}&host=${encodeURIComponent(hostName)}`;
       
-      const inviteText = encodeURIComponent(`🎮 I am challenging you to a live round on Naija Know!\n\nTap here to accept and battle me directly: ${roomLink}`);
-      
-      initializeLiveGameRoom(roomId, hostName, true);
-      
+      localPlayerRole = "p1";
+      isRemoteChallenge = true;
+
+      connectToLiveRoom(roomId, hostName, null, true);
+
+      const inviteText = encodeURIComponent(`🎮 I challenge you to a live 1v1 round on Naija Know!\n\nTap here to accept and battle: ${roomLink}`);
       window.open(`https://api.whatsapp.com/send?text=${inviteText}`, '_blank');
+      alert("Challenge created! Waiting for your opponent to open WhatsApp and join...");
     }
 
-    function initializeLiveGameRoom(roomId, playerName, isHost) {
+    function connectToLiveRoom(roomId, playerName, hostName, isHost) {
       if (!supabaseClient) return;
 
       multiplayerChannel = supabaseClient.channel(roomId);
 
       multiplayerChannel
         .on('broadcast', { event: 'player_joined' }, ({ payload }) => {
-          alert(`🎉 ${payload.guest} joined the game! Starting 1v1 battle...`);
-          const p2Input = document.getElementById("p2Name");
-          if (p2Input) p2Input.value = payload.guest;
+          if (isHost) {
+            alert(`🎉 ${payload.guest} joined! Starting match...`);
+            const p2Input = document.getElementById("p2Name");
+            if (p2Input) p2Input.value = payload.guest;
 
-          const modeSelect = document.getElementById("mode");
-          if (modeSelect) {
-            modeSelect.value = "duo";
-            modeSelect.dispatchEvent(new Event("change"));
+            const modeSelect = document.getElementById("mode");
+            if (modeSelect) {
+              modeSelect.value = "duo";
+              modeSelect.dispatchEvent(new Event("change"));
+            }
+
+            const questions = window.nk_getGameQuestions();
+            multiplayerChannel.send({
+              type: 'broadcast',
+              event: 'match_start',
+              payload: {
+                pool: questions,
+                p1Name: playerName,
+                p2Name: payload.guest,
+                category: document.getElementById("category").value,
+                level: document.getElementById("level").value,
+                round: document.getElementById("round").value,
+                seconds: document.getElementById("seconds").value
+              }
+            });
+
+            window.nk_startLiveMatch(questions, playerName, payload.guest, true);
           }
+        })
+        .on('broadcast', { event: 'match_start' }, ({ payload }) => {
+          if (!isHost) {
+            const p1Input = document.getElementById("p1Name");
+            const p2Input = document.getElementById("p2Name");
+            if (p1Input) p1Input.value = payload.p1Name;
+            if (p2Input) p2Input.value = payload.p2Name;
 
-          const startBtn = document.getElementById("start");
-          if (startBtn) startBtn.click();
+            const modeSelect = document.getElementById("mode");
+            if (modeSelect) {
+              modeSelect.value = "duo";
+              modeSelect.dispatchEvent(new Event("change"));
+            }
+
+            window.nk_startLiveMatch(payload.pool, payload.p1Name, payload.p2Name, false);
+          }
+        })
+        .on('broadcast', { event: 'game_step' }, ({ payload }) => {
+          window.nk_syncGameStep(payload);
         })
         .subscribe((status) => {
           if (status === 'SUBSCRIBED' && !isHost) {
@@ -900,7 +922,7 @@
     }
 
     /* ===================================================
-       2. MAIN APPLICATION CORE
+       2. MAIN APPLICATION CORE & INTERFACE
        =================================================== */
     (() => {
       "use strict";
@@ -942,47 +964,43 @@
         logs: []
       };
 
-      function checkIncomingChallenge() {
-        try {
-          const params = new URLSearchParams(window.location.search);
-          const challengeScore = params.get("challenge");
-          const incomingRoom = params.get("room");
-          const hostName = params.get("host");
-
-          if (incomingRoom) {
-            const guestName = prompt(`You have been challenged by ${hostName || "a friend"}! Enter your name to join:`) || "Player 2";
-            const p1Input = $("p1Name");
-            const p2Input = $("p2Name");
-            const modeSelect = $("mode");
-
-            if (p1Input) p1Input.value = hostName || "Player 1";
-            if (p2Input) p2Input.value = guestName;
-            if (modeSelect) {
-              modeSelect.value = "duo";
-              modeSelect.dispatchEvent(new Event("change"));
-            }
-
-            initializeLiveGameRoom(incomingRoom, guestName, false);
-          } else if (challengeScore !== null) {
-            const banner = $("challengeBanner");
-            const bannerText = $("challengeBannerText");
-            if (banner && bannerText) {
-              bannerText.textContent = `🎯 Friend Challenge! Can you beat a score of ${challengeScore} points?`;
-              banner.hidden = false;
-
-              const dismissBtn = $("dismissBannerBtn");
-              if (dismissBtn) {
-                dismissBtn.onclick = () => { banner.hidden = true; };
-              }
-            }
+      function screen(name) {
+        ids.forEach(id => {
+          if (screens[id]) {
+            screens[id].hidden = (id !== name);
           }
-        } catch (e) {
-          console.warn("Could not parse query params:", e);
+        });
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function stop() {
+        if (s.timer !== null) {
+          clearInterval(s.timer);
+          s.timer = null;
         }
       }
 
-      function generateChallengeUrl(score) {
-        return `https://abiolaadenugba.github.io/naija-know/?challenge=${score}`;
+      function stats() {
+        try {
+          return JSON.parse(localStorage.getItem(KEY)) || { sessions: [], answered: 0, correct: 0, cats: {} };
+        } catch (e) {
+          return { sessions: [], answered: 0, correct: 0, cats: {} };
+        }
+      }
+
+      function save(x) {
+        try {
+          localStorage.setItem(KEY, JSON.stringify(x));
+        } catch (e) {}
+      }
+
+      function shuffle(arr) {
+        const a = arr.slice();
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
       }
 
       // MASTER QUESTION BANK
@@ -1000,7 +1018,7 @@
         { category: "Sports", level: "Medium", question: "Who scored Nigeria's first-ever FIFA World Cup goal in 1994 against Bulgaria?", options: ["Rashidi Yekini", "Daniel Amokachi", "Emmanuel Amunike", "Samson Siasia"], answer: 0, explanation: "Rashidi Yekini scored Nigeria's historic first World Cup goal on 21 June 1994." },
         { category: "Sports", level: "Medium", question: "Which athlete set the world record in the women's 100m hurdles (12.12s) in 2022?", options: ["Tobi Amusan", "Blessing Okagbare", "Ese Brume", "Glory Alozie"], answer: 0, explanation: "Tobi Amusan clocked 12.12 seconds in Oregon to set the world record." },
         { category: "Sports", level: "Medium", question: "Which Nigerian striker won the Serie A top scorer award and the league with Napoli in 2023?", options: ["Victor Osimhen", "Ademola Lookman", "Victor Boniface", "Taiwo Awoniyi"], answer: 0, explanation: "Victor Osimhen netted 26 league goals to clinch the Scudetto and Capocannoniere." },
-        { category: "Sports", level: "Medium", question: "In what year did Nigeria win its first Africa Cup of Nations (AFCON) title on home solid?", options: ["1980", "1976", "1994", "2000"], answer: 0, explanation: "The Green Eagles won their first AFCON title in Lagos in 1980, defeating Algeria 3-0." },
+        { category: "Sports", level: "Medium", question: "In what year did Nigeria win its first Africa Cup of Nations (AFCON) title on home soil?", options: ["1980", "1976", "1994", "2000"], answer: 0, explanation: "The Green Eagles won their first AFCON title in Lagos in 1980, defeating Algeria 3-0." },
         { category: "Sports", level: "Hard", question: "Who won Nigeria's first-ever Olympic medal (a bronze in boxing) at Tokyo in 1964?", options: ["Nojim Maiyegun", "Peter Konyegwachie", "David Izonritei", "Duncan Dokiwari"], answer: 0, explanation: "Nojim Maiyegun won bronze in men's light middleweight boxing at Tokyo 1964." },
         { category: "Sports", level: "Hard", question: "Which Nigerian table tennis legend competed in seven consecutive Olympic Games (1992 to 2016)?", options: ["Segun Toriola", "Quadri Aruna", "Bose Kaffo", "Atanda Musa"], answer: 0, explanation: "Segun Toriola represented Nigeria in table tennis across seven straight Olympic Games." },
 
@@ -1198,43 +1216,75 @@
         }))
       ];
 
-      function screen(name) {
-        ids.forEach(id => {
-          if (screens[id]) {
-            screens[id].hidden = (id !== name);
-          }
-        });
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-
-      function stop() {
-        if (s.timer !== null) {
-          clearInterval(s.timer);
-          s.timer = null;
+      // Export question generation for remote host
+      window.nk_getGameQuestions = () => {
+        const cat = $("category").value;
+        const lev = $("level").value;
+        const rnd = parseInt($("round").value, 10);
+        let matched = BANK.filter(q => q.category === cat && q.level === lev);
+        if (matched.length < rnd) {
+          const others = BANK.filter(q => q.category === cat && q.level !== lev);
+          matched = matched.concat(shuffle(others));
         }
-      }
+        if (!matched.length) matched = BANK.filter(q => q.category === cat);
+        return shuffle(matched).slice(0, Math.min(rnd, matched.length));
+      };
 
-      function stats() {
-        try {
-          return JSON.parse(localStorage.getItem(KEY)) || { sessions: [], answered: 0, correct: 0, cats: {} };
-        } catch (e) {
-          return { sessions: [], answered: 0, correct: 0, cats: {} };
+      // Remote 1v1 Sync Handlers
+      window.nk_startLiveMatch = (pool, p1, p2, isHost) => {
+        isRemoteChallenge = true;
+        s.mode = "duo";
+        s.p1 = p1;
+        s.p2 = p2;
+        s.pool = pool;
+        s.secs = parseInt($("seconds").value, 10) || 15;
+        s.i = 0;
+        s.score = 0;
+        s.p1Score = 0;
+        s.p2Score = 0;
+        s.currentTurn = 1;
+        s.correct = 0;
+        s.answered = 0;
+        s.locked = false;
+        s.started = Date.now();
+        s.logs = [];
+
+        $("soloScoreWrap").hidden = true;
+        $("duoScoreWrap").hidden = false;
+        $("turnIndicator").hidden = false;
+        $("p1Label").textContent = s.p1;
+        $("p2Label").textContent = s.p2;
+        $("p1Score").textContent = "0";
+        $("p2Score").textContent = "0";
+
+        $("gameCategory").textContent = `LIVE 1v1 CHALLENGE`;
+        $("shareStatus").textContent = "";
+        $("shareBox").hidden = true;
+
+        screen("game");
+        render();
+      };
+
+      window.nk_syncGameStep = (payload) => {
+        if (payload.action === "answer") {
+          applyAnswerResult(payload.optIndex, payload.isOk, payload.currentTurn);
+        } else if (payload.action === "timeout") {
+          applyTimeoutResult();
+        } else if (payload.action === "next") {
+          s.i = payload.nextIndex;
+          s.currentTurn = payload.nextTurn;
+          render();
         }
-      }
+      };
 
-      function save(x) {
-        try {
-          localStorage.setItem(KEY, JSON.stringify(x));
-        } catch (e) {}
-      }
-
-      function shuffle(arr) {
-        const a = arr.slice();
-        for (let i = a.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [a[i], a[j]] = [a[j], a[i]];
+      function broadcastAction(payload) {
+        if (isRemoteChallenge && multiplayerChannel) {
+          multiplayerChannel.send({
+            type: 'broadcast',
+            event: 'game_step',
+            payload
+          });
         }
-        return a;
       }
 
       function start(same = false) {
@@ -1250,15 +1300,11 @@
         }
 
         let matched = BANK.filter(q => q.category === s.category && q.level === s.level);
-
         if (matched.length < s.round) {
           const otherLevelsSameCat = BANK.filter(q => q.category === s.category && q.level !== s.level);
           matched = matched.concat(shuffle(otherLevelsSameCat));
         }
-
-        if (!matched.length) {
-          matched = BANK.filter(q => q.category === s.category);
-        }
+        if (!matched.length) matched = BANK.filter(q => q.category === s.category);
 
         if (!matched.length) {
           alert(`No questions found under ${s.category}. Please choose another category.`);
@@ -1307,12 +1353,15 @@
       function updateTurnUI() {
         if (s.mode !== "duo") return;
         const turnEl = $("turnIndicator");
-        if (s.currentTurn === 1) {
-          turnEl.className = "turn-indicator turn-p1";
-          turnEl.textContent = `${s.p1}'s Turn`;
+        const activeName = s.currentTurn === 1 ? s.p1 : s.p2;
+        
+        if (isRemoteChallenge) {
+          const isMyTurn = (localPlayerRole === "p1" && s.currentTurn === 1) || (localPlayerRole === "p2" && s.currentTurn === 2);
+          turnEl.className = s.currentTurn === 1 ? "turn-indicator turn-p1" : "turn-indicator turn-p2";
+          turnEl.textContent = isMyTurn ? `Your Turn (${activeName})` : `Opponent's Turn (${activeName})`;
         } else {
-          turnEl.className = "turn-indicator turn-p2";
-          turnEl.textContent = `${s.p2}'s Turn`;
+          turnEl.className = s.currentTurn === 1 ? "turn-indicator turn-p1" : "turn-indicator turn-p2";
+          turnEl.textContent = `${activeName}'s Turn`;
         }
       }
 
@@ -1334,7 +1383,9 @@
         $("next").hidden = true;
         $("skip").hidden = false;
 
-        // Auto-pause timer for open-ended conversation categories
+        // Turn Lock: Prevent tapping when it is the remote opponent's turn
+        const isRemoteTurn = isRemoteChallenge && ((localPlayerRole === "p1" && s.currentTurn !== 1) || (localPlayerRole === "p2" && s.currentTurn !== 2));
+
         if (q.prompt) {
           $("timer").textContent = "Untimed (Chat freely)";
           const note = document.createElement("div");
@@ -1350,34 +1401,35 @@
             b.className = "answer";
             b.type = "button";
             b.textContent = txt;
+            if (isRemoteTurn) b.disabled = true;
             b.onclick = () => promptDone(pass);
             $("answers").append(b);
           });
         } else {
           $("timer").textContent = s.time;
           const correctText = q.options[q.answer];
-          const shuffled = shuffle(q.options.map((text, idx) => ({ text, idx })));
 
-          shuffled.forEach((opt, idx) => {
+          q.options.forEach((optText, idx) => {
             const b = document.createElement("button");
             b.className = "answer";
             b.type = "button";
-            b.innerHTML = `<b>${String.fromCharCode(65 + idx)}.</b> `;
-            const span = document.createElement("span");
-            span.textContent = opt.text;
-            b.append(span);
-            b.onclick = () => handleAnswer(b, opt.text === correctText, q);
+            b.innerHTML = `<b>${String.fromCharCode(65 + idx)}.</b> <span>${optText}</span>`;
+            if (isRemoteTurn) b.disabled = true;
+            b.onclick = () => handleAnswer(idx, optText === correctText, q);
             $("answers").append(b);
           });
 
-          // Countdown clock only runs on scored trivia
+          // Countdown clock runs only for active player
           s.timer = setInterval(() => {
             if (s.locked) return;
             s.time--;
             $("timer").textContent = Math.max(0, s.time);
             if (s.time <= 0) {
               stop();
-              handleTimeout(q);
+              if (!isRemoteTurn) {
+                broadcastAction({ action: "timeout" });
+                handleTimeout(q);
+              }
             }
           }, 1000);
         }
@@ -1391,57 +1443,77 @@
         p.textContent = exp;
         $("feedback").append(strong, p);
         $("feedback").hidden = false;
-        $("next").hidden = false;
-        $("next").textContent = s.i === s.pool.length - 1 ? "See results" : "Next question";
+
+        const isRemoteTurn = isRemoteChallenge && ((localPlayerRole === "p1" && s.currentTurn !== 1) || (localPlayerRole === "p2" && s.currentTurn !== 2));
+        if (!isRemoteTurn) {
+          $("next").hidden = false;
+          $("next").textContent = s.i === s.pool.length - 1 ? "See results" : "Next question";
+        } else {
+          $("next").hidden = true;
+        }
         $("skip").hidden = true;
         $("progress").style.width = ((s.i + 1) / s.pool.length * 100) + "%";
       }
 
-      function handleAnswer(btn, isOk, q) {
-        if (s.locked) return;
-        s.locked = true;
+      function applyAnswerResult(optIndex, isOk, turn) {
         stop();
+        s.locked = true;
         s.answered++;
-        [...$("answers").querySelectorAll("button")].forEach(b => (b.disabled = true));
+        const q = s.pool[s.i];
+        const buttons = [...$("answers").querySelectorAll("button")];
+        buttons.forEach(b => (b.disabled = true));
+
+        if (buttons[optIndex]) {
+          buttons[optIndex].classList.add(isOk ? "correct" : "wrong");
+        }
 
         if (isOk) {
           s.correct++;
-          if (s.mode === "duo") {
-            if (s.currentTurn === 1) {
-              s.p1Score += 10;
-              $("p1Score").textContent = s.p1Score;
-            } else {
-              s.p2Score += 10;
-              $("p2Score").textContent = s.p2Score;
-            }
-            reveal(`Correct! +10 points to ${s.currentTurn === 1 ? s.p1 : s.p2}`, q.explanation);
+          if (turn === 1) {
+            s.p1Score += 10;
+            $("p1Score").textContent = s.p1Score;
           } else {
-            s.score += 10;
-            $("score").textContent = s.score;
-            reveal("Correct! +10 points", q.explanation);
+            s.p2Score += 10;
+            $("p2Score").textContent = s.p2Score;
           }
-          btn.classList.add("correct");
+          reveal(`Correct! +10 points to ${turn === 1 ? s.p1 : s.p2}`, q.explanation);
         } else {
-          btn.classList.add("wrong");
-          [...$("answers").querySelectorAll("button")].forEach(b => {
+          buttons.forEach(b => {
             if (b.textContent.slice(3).trim() === q.options[q.answer]) b.classList.add("correct");
           });
           reveal("Not quite. No points awarded.", `Correct answer: ${q.options[q.answer]}. ${q.explanation}`);
         }
-
-        s.logs.push({ question: q.question, correct: isOk, player: s.currentTurn });
       }
 
-      function handleTimeout(q) {
+      function handleAnswer(optIndex, isOk, q) {
+        if (s.locked) return;
+        s.locked = true;
+        stop();
+
+        applyAnswerResult(optIndex, isOk, s.currentTurn);
+        broadcastAction({
+          action: "answer",
+          optIndex,
+          isOk,
+          currentTurn: s.currentTurn
+        });
+      }
+
+      function applyTimeoutResult() {
         if (s.locked) return;
         s.locked = true;
         s.answered++;
+        const q = s.pool[s.i];
         [...$("answers").querySelectorAll("button")].forEach(b => {
           b.disabled = true;
           if (b.textContent.slice(3).trim() === q.options[q.answer]) b.classList.add("correct");
         });
         reveal("Time is up!", `Correct answer: ${q.options[q.answer]}. ${q.explanation}`);
-        s.logs.push({ question: q.question, correct: false, timeout: true });
+      }
+
+      function handleTimeout(q) {
+        applyTimeoutResult();
+        broadcastAction({ action: "timeout" });
       }
 
       function promptDone(pass) {
@@ -1452,7 +1524,6 @@
         const q = s.pool[s.i];
         [...$("answers").querySelectorAll("button")].forEach(b => (b.disabled = true));
         reveal(pass ? "Prompt skipped." : "Nice! Conversation logged.", q.explanation);
-        s.logs.push({ question: q.question, prompt: true, pass });
       }
 
       function next() {
@@ -1461,6 +1532,12 @@
         if (s.mode === "duo") {
           s.currentTurn = s.currentTurn === 1 ? 2 : 1;
         }
+
+        broadcastAction({
+          action: "next",
+          nextIndex: s.i,
+          nextTurn: s.currentTurn
+        });
 
         if (s.i >= s.pool.length) finish();
         else render();
@@ -1524,12 +1601,23 @@
         save(st);
 
         $("shareBox").hidden = true;
+        // Update Supabase score in database
+        const saved = localStorage.getItem("nk_registered_player");
+        if (saved) {
+          try {
+            const player = JSON.parse(saved);
+            if (player.email) {
+              const recordedScore = isDuo ? (localPlayerRole === "p1" ? s.p1Score : s.p2Score) : s.score;
+              updatePlayerScoreInDB(player.email, recordedScore);
+            }
+          } catch (e) {}
+        }
         screen("results");
       }
 
       function triggerShare() {
         const score = s.mode === "duo" ? Math.max(s.p1Score, s.p2Score) : (s.last ? s.last.score : s.score);
-        const challengeUrl = generateChallengeUrl(score);
+        const challengeUrl = `https://abiolaadenugba.github.io/naija-know/?challenge=${score}`;
         const text = `🎯 I scored ${score} points on Naija Know! Can you beat my score? Play here: ${challengeUrl}`;
 
         const box = $("shareBox");
@@ -1553,26 +1641,16 @@
       function copyChallengeLink() {
         const input = $("shareLinkInput");
         if (!input) return;
-
         input.focus();
         input.select();
         input.setSelectionRange(0, 99999);
+        try { document.execCommand("copy"); } catch (e) {}
 
-        let copied = false;
-        try {
-          copied = document.execCommand("copy");
-        } catch (e) {
-          copied = false;
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(input.value).then(() => setCopiedFeedback());
+        } else {
+          setCopiedFeedback();
         }
-
-        if (!copied && navigator.clipboard && window.isSecureContext) {
-          navigator.clipboard.writeText(input.value)
-            .then(() => setCopiedFeedback())
-            .catch(() => setCopiedFeedback());
-          return;
-        }
-
-        setCopiedFeedback();
       }
 
       function setCopiedFeedback() {
@@ -1664,6 +1742,41 @@
         }
       }
 
+      function checkIncomingChallenge() {
+        try {
+          const params = new URLSearchParams(window.location.search);
+          const incomingRoom = params.get("room");
+          const hostName = params.get("host");
+
+          if (incomingRoom) {
+            const subtitle = $("regModalSubtitle");
+            if (subtitle) {
+              subtitle.textContent = `You've been challenged by ${hostName || "a friend"}! Enter your details to accept and begin the live match:`;
+            }
+            pendingJoinRoom = { roomId: incomingRoom, hostName };
+
+            const saved = localStorage.getItem("nk_registered_player");
+            if (saved) {
+              try {
+                const parsed = JSON.parse(saved);
+                localPlayerRole = "p2";
+                const p2Input = $("p2Name");
+                if (p2Input) p2Input.value = parsed.name || "Player 2";
+                connectToLiveRoom(incomingRoom, parsed.name || "Player 2", hostName, false);
+                pendingJoinRoom = null;
+                return;
+              } catch(e) {}
+            }
+
+            // Force registration modal open for opponent
+            const regModal = $("regModal");
+            if (regModal) regModal.classList.remove("hidden");
+          }
+        } catch (e) {
+          console.warn("Could not parse query params:", e);
+        }
+      }
+
       function initApp() {
         const bind = (id, fn) => {
           const el = $(id);
@@ -1693,7 +1806,6 @@
             s.locked = true;
             stop();
             s.answered++;
-            s.logs.push({ question: q.question, skip: true });
             reveal("Question skipped.", q.explanation);
           }
         });
@@ -1719,14 +1831,13 @@
         const cForm = $("contactForm");
         if (cForm) cForm.onsubmit = handleContact;
 
-        // Auto display registration modal if not yet registered
         const savedPlayer = localStorage.getItem("nk_registered_player");
-        if (!savedPlayer) {
+        if (!savedPlayer && !window.location.search.includes("room=")) {
           setTimeout(() => {
             const regModal = $("regModal");
             if (regModal) regModal.classList.remove("hidden");
           }, 600);
-        } else {
+        } else if (savedPlayer) {
           try {
             const parsed = JSON.parse(savedPlayer);
             const p1Input = $("p1Name");
