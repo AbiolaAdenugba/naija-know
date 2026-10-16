@@ -1524,15 +1524,22 @@
       }
 
       if (isOk) {
-        s.correct++;
-        if (turn === 1) {
-          s.p1Score += 10;
-          $("p1Score").textContent = s.p1Score;
-        } else {
-          s.p2Score += 10;
-          $("p2Score").textContent = s.p2Score;
-        }
-        reveal(`Correct! +10 points to ${turn === 1 ? s.p1 : s.p2}`, q.explanation);
+    s.correct++;
+    if (s.mode === "duo") {
+      if (turn === 1) {
+        s.p1Score += 10;
+        $("p1Score").textContent = s.p1Score;
+      } else {
+        s.p2Score += 10;
+        $("p2Score").textContent = s.p2Score;
+      }
+      reveal(`Correct! +10 points to ${turn === 1 ? s.p1 : s.p2}`, q.explanation);
+    } else {
+      s.score += 10;
+      const scoreEl = $("score");
+      if (scoreEl) scoreEl.textContent = s.score;
+      reveal("Correct! +10 points", q.explanation);
+    }
       } else {
         buttons.forEach(b => {
           if (b.textContent.slice(3).trim() === q.options[q.answer]) b.classList.add("correct");
